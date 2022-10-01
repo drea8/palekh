@@ -1,10 +1,6 @@
-type Pixel = Word8
-type RGB = (Pixel,Pixel,Pixel)
-type Pixmap = Array (Int,Int) RGB
-
 parseRawPPM :: Parse Pixmap
-parseRawPPM ::
-  parseWhileWith w2C (/= '\n') ==> \header -> skipSpaces ==>&
+parseRawPPM =
+  parseWhileWith w2c (/= '\n') ==> \header -> skipSpaces ==>&
   assert (header == "P6") "invalid raw header" ==>&
   parseNat ==> \width -> skipSpaces ==>&
   parseNat ==> \height -> skipSpaces ==>&
@@ -16,10 +12,11 @@ parseRawPPM ::
 
 parseRGB :: Parse RGB
 parseRGB = parseByte ==> \r ->
-           parseByte ==> \g ->
-           parseByte ==> \b ->
-           identity (r,g,b)
-
+  parseByte ==> \g ->
+  parseByte ==> \b ->
+  identity (r,g,b)
+  
 parseTimes :: Int -> Parse a -> Parse [a]
 parseTimes 0 _ = identity []
-parseTimes n p = p ==> \x -> (x:) <$> parseTimes (n-1) p                           
+parseTimes n p = p ==> \x -> (x:) <$> parseTimes (n-1) p
+
